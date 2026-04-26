@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<!-- saved from url=(0062)file:///C:/Users/Viking/Downloads/security-ir-assistant_3.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CyberGuard IR Assistant</title>
+<link href="./index_files/css2" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f12;
+    --bg2: #13181f;
+    --bg3: #1a2030;
+    --bg4: #1f2535;
+    --border: #1e3055;
+    --border2: #2a4570;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #64748b;
+    --amber: #1a7fe8;
+    --amber2: #4a9ff5;
+    --red: #ef4444;
+    --red2: #f87171;
+    --green: #22c55e;
+    --green2: #4ade80;
+    --blue: #3b82f6;
+    --blue2: #60a5fa;
+    --cyan: #06b6d4;
+    --purple: #a855f7;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-display: 'Exo 2', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-mono);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    background-image: radial-gradient(circle, rgba(26,127,232,0.15) 1px, transparent 1px);
+    background-size: 20px 20px;
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .logo-icon {
+    width: 28px;
+    height: 28px;
+    background: var(--amber);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo-icon svg { width: 16px; height: 16px; }
+
+  .logo-text {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .logo-sub {
+    font-size: 0.65rem;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .header-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    color: var(--text3);
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .api-key-btn {
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--text2);
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .api-key-btn:hover {
+    border-color: var(--amber);
+    color: var(--amber);
+  }
+
+  /* LAYOUT */
+  .main {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .sidebar-section {
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 0.75rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  /* NEW INCIDENT FORM */
+  .form-group { margin-bottom: 0.75rem; }
+
+  .form-label {
+    display: block;
+    font-size: 0.68rem;
+    color: var(--text3);
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.05em;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 7px 10px;
+    border-radius: 4px;
+    transition: border-color 0.15s;
+    outline: none;
+  }
+
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--amber);
+  }
+
+  .form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2364748b'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    cursor: pointer;
+  }
+
+  .form-select option { background: var(--bg3); }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 70px;
+    line-height: 1.5;
+  }
+
+  .severity-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .severity-btn {
+    padding: 6px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    color: var(--text2);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+
+  .severity-btn.active-critical { border-color: var(--red); background: rgba(239,68,68,0.1); color: var(--red2); }
+  .severity-btn.active-high { border-color: var(--amber); background: rgba(26,127,232,0.1); color: var(--amber2); }
+  .severity-btn.active-medium { border-color: var(--blue); background: rgba(59,130,246,0.1); color: var(--blue2); }
+  .severity-btn.active-low { border-color: var(--green); background: rgba(34,197,94,0.1); color: var(--green2); }
+  .severity-btn:hover { border-color: var(--border2); }
+
+  .start-btn {
+    width: 100%;
+    padding: 10px;
+    background: var(--amber);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  .start-btn:hover { background: var(--amber2); color: #fff; transform: translateY(-1px); }
+  .start-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* INCIDENT LIST */
+  .incident-item {
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.1s;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .incident-item:hover { background: var(--bg3); }
+  .incident-item.active { background: var(--bg4); border-left: 2px solid var(--amber); }
+
+  .incident-sev-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+
+  .incident-info { flex: 1; min-width: 0; }
+
+  .incident-title {
+    font-size: 0.72rem;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+  }
+
+  .incident-meta {
+    font-size: 0.62rem;
+    color: var(--text3);
+  }
+
+  /* MAIN CONTENT */
+  .content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* EMPTY STATE */
+  .empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    color: var(--text3);
+  }
+
+  .empty-icon {
+    width: 64px;
+    height: 64px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.5;
+  }
+
+  .empty-state h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text2);
+  }
+
+  .empty-state p { font-size: 0.75rem; }
+
+  /* INCIDENT VIEW */
+  .incident-view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .incident-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .incident-header-left { flex: 1; min-width: 0; }
+
+  .incident-title-main {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .incident-badges {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .badge-critical { background: rgba(239,68,68,0.15); color: var(--red2); border: 1px solid rgba(239,68,68,0.3); }
+  .badge-high { background: rgba(26,127,232,0.15); color: var(--amber2); border: 1px solid rgba(26,127,232,0.3); }
+  .badge-medium { background: rgba(59,130,246,0.15); color: var(--blue2); border: 1px solid rgba(59,130,246,0.3); }
+  .badge-low { background: rgba(34,197,94,0.15); color: var(--green2); border: 1px solid rgba(34,197,94,0.3); }
+  .badge-type { background: var(--bg4); color: var(--text2); border: 1px solid var(--border); }
+  .badge-status { background: rgba(168,85,247,0.15); color: #c084fc; border: 1px solid rgba(168,85,247,0.3); }
+
+  .export-btn {
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--text2);
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .export-btn:hover { border-color: var(--amber); color: var(--amber); }
+
+  /* PHASE TABS */
+  .phase-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 0 1.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .phase-tab {
+    padding: 10px 16px;
+    font-size: 0.7rem;
+    color: var(--text3);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+    white-space: nowrap;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+  }
+
+  .phase-tab.active { color: var(--amber); border-bottom-color: var(--amber); font-weight: 600; cursor: default; }
+  .phase-tab.done { color: var(--green2); cursor: default; }
+  .phase-tab { cursor: default; }
+
+  .next-phase-btn {
+    background: var(--amber);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 16px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.72rem;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+    margin-right: 0.5rem;
+  }
+  .next-phase-btn:hover { background: var(--amber2); }
+
+  .prev-phase-btn {
+    background: transparent;
+    color: var(--text2);
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    padding: 6px 16px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.72rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .prev-phase-btn:hover { border-color: var(--amber); color: var(--amber); }
+
+  .tab-check {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    color: #000;
+  }
+
+  /* CHAT AREA */
+  .chat-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border2) transparent;
+  }
+
+  .msg {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .msg-role {
+    font-size: 0.6rem;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .msg-role-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+  }
+
+  .icon-ai { background: var(--amber); color: #000; }
+  .icon-user { background: var(--bg4); color: var(--text2); border: 1px solid var(--border2); }
+
+  .msg-bubble {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    color: var(--text);
+    max-width: 100%;
+  }
+
+  .msg-bubble.user-bubble {
+    background: var(--bg3);
+    border-color: var(--border2);
+    align-self: flex-end;
+    max-width: 80%;
+  }
+
+  .msg-bubble h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--amber2);
+    margin-bottom: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .msg-bubble h3:first-child { margin-top: 0; }
+
+  .msg-bubble ul, .msg-bubble ol {
+    padding-left: 1.25rem;
+    margin: 0.4rem 0;
+  }
+
+  .msg-bubble li {
+    margin-bottom: 0.25rem;
+  }
+
+  .msg-bubble strong { color: var(--amber2); }
+
+  .msg-bubble code {
+    background: var(--bg4);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 0.78rem;
+    color: var(--cyan);
+  }
+
+  .msg-bubble pre {
+    background: var(--bg4);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+    overflow-x: auto;
+    margin: 0.5rem 0;
+  }
+
+  .msg-bubble pre code {
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  .typing-indicator {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding: 0.5rem;
+  }
+
+  .typing-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--amber);
+    animation: typingBounce 1.2s infinite;
+  }
+
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-4px); opacity: 1; }
+  }
+
+  /* QUICK ACTIONS */
+  .quick-actions {
+    padding: 0.75rem 1.5rem;
+    border-top: 1px solid var(--border);
+    background: var(--bg2);
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .quick-btn {
+    padding: 5px 12px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .quick-btn:hover { border-color: var(--amber); color: var(--amber); }
+
+  /* INPUT AREA */
+  .input-area {
+    padding: 0.75rem 1.5rem 1rem;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-end;
+  }
+
+  .chat-input {
+    flex: 1;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 10px 14px;
+    border-radius: 6px;
+    resize: none;
+    min-height: 44px;
+    max-height: 120px;
+    outline: none;
+    line-height: 1.5;
+    transition: border-color 0.15s;
+  }
+
+  .chat-input:focus { border-color: var(--amber); }
+  .chat-input::placeholder { color: var(--text3); }
+
+  .send-btn {
+    width: 44px;
+    height: 44px;
+    background: var(--amber);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .send-btn:hover { background: var(--amber2); }
+  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .send-btn svg { width: 18px; height: 18px; fill: #fff; }
+
+  /* API KEY MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 2rem;
+    width: 440px;
+    max-width: 90vw;
+  }
+
+  .modal h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .modal p {
+    font-size: 0.75rem;
+    color: var(--text2);
+    margin-bottom: 1.25rem;
+    line-height: 1.6;
+  }
+
+  .modal-input {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    padding: 10px 14px;
+    border-radius: 4px;
+    outline: none;
+    margin-bottom: 1rem;
+    transition: border-color 0.15s;
+  }
+
+  .modal-input:focus { border-color: var(--amber); }
+
+  .modal-btns { display: flex; gap: 0.75rem; justify-content: flex-end; }
+
+  .modal-cancel {
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--text2);
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+
+  .modal-save {
+    background: var(--amber);
+    border: none;
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .modal-save:hover { background: var(--amber2); }
+
+  .notice {
+    font-size: 0.68rem;
+    color: var(--text3);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+    padding: 0.6rem 0.8rem;
+    background: var(--bg4);
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  /* Timeline / checklist inside chat */
+  .checklist { margin: 0.5rem 0; }
+  .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.3rem 0;
+    font-size: 0.78rem;
+  }
+  .checklist-item input[type="checkbox"] { margin-top: 3px; accent-color: var(--amber); cursor: pointer; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <div class="logo">
+      <div class="logo-icon" style="background:var(--amber);width:32px;height:32px;border-radius:5px;display:flex;align-items:center;justify-content:center;">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+          <path d="M10 2L17 5.5V11C17 14.5 13.5 17.5 10 19C6.5 17.5 3 14.5 3 11V5.5L10 2Z" fill="rgba(255,255,255,0.15)" stroke="#fff" stroke-width="1.2"></path>
+          <text x="10" y="14" font-family="Exo 2,sans-serif" font-weight="800" font-size="7.5" fill="#fff" text-anchor="middle">CG</text>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-text">CyberGuard</div>
+        <div class="logo-sub">IR Assistant</div>
+      </div>
+    </div>
+  </div>
+  <div class="header-status">
+    <div class="status-dot"></div>
+    <span>AI ONLINE</span>
+  </div>
+  <div class="header-right">
+    <button class="api-key-btn" onclick="openApiModal()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+      API KEY
+    </button>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">New Incident</div>
+
+      <div class="form-group">
+        <label class="form-label">INCIDENT TITLE</label>
+        <input class="form-input" id="incTitle" placeholder="e.g. Suspected ransomware on PROD01">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">INCIDENT TYPE</label>
+        <select class="form-select" id="incType">
+          <option value="">— Select type —</option>
+          <option>Ransomware</option>
+          <option>Phishing / BEC</option>
+          <option>Data Breach</option>
+          <option>Insider Threat</option>
+          <option>DDoS Attack</option>
+          <option>Malware Infection</option>
+          <option>Unauthorized Access</option>
+          <option>Credential Compromise</option>
+          <option>Supply Chain Attack</option>
+          <option>Zero-Day Exploit</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">SEVERITY</label>
+        <div class="severity-grid" id="severityGrid">
+          <button class="severity-btn" data-sev="Critical" onclick="selectSev(this)">● CRITICAL</button>
+          <button class="severity-btn" data-sev="High" onclick="selectSev(this)">● HIGH</button>
+          <button class="severity-btn" data-sev="Medium" onclick="selectSev(this)">● MEDIUM</button>
+          <button class="severity-btn" data-sev="Low" onclick="selectSev(this)">● LOW</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">AFFECTED SYSTEMS / SCOPE</label>
+        <textarea class="form-textarea" id="incScope" placeholder="List affected hosts, services, users, or data..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">INITIAL DESCRIPTION</label>
+        <textarea class="form-textarea" id="incDesc" placeholder="Describe what was observed, by whom, and when..."></textarea>
+      </div>
+
+      <button class="start-btn" id="startBtn" onclick="startIncident()">OPEN INCIDENT</button>
+    </div>
+
+    <div class="sidebar-section" style="flex:1;">
+      <div class="sidebar-label">Active Incidents</div>
+      <div id="incidentList" style="margin-top: -0.25rem;"><div class="incident-item active" onclick="loadIncident(&#39;1777209336916&#39;)">
+      <div class="incident-sev-dot" style="background:#ef4444"></div>
+      <div class="incident-info">
+        <div class="incident-title">Suspected Ransomware</div>
+        <div class="incident-meta">Ransomware · Detection · 21m ago</div>
+      </div>
+    </div><div class="incident-item " onclick="loadIncident(&#39;1777209029816&#39;)">
+      <div class="incident-sev-dot" style="background:#ef4444"></div>
+      <div class="incident-info">
+        <div class="incident-title">Suspected Ransomware</div>
+        <div class="incident-meta">Ransomware · Post-Incident · 26m ago</div>
+      </div>
+    </div></div>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content" id="content">
+    <div class="empty-state" id="emptyState" style="display: none;">
+      <div class="empty-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.5">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+      </div>
+      <h2>No Active Incident</h2>
+      <p>Open a new incident to begin guided response</p>
+    </div>
+    <div class="incident-view" id="incidentView" style="display: flex;">
+    <div class="incident-header">
+      <div class="incident-header-left">
+        <div class="incident-title-main">Suspected Ransomware</div>
+        <div class="incident-badges">
+          <span class="badge badge-critical">Critical</span>
+          <span class="badge badge-type">Ransomware</span>
+          <span class="badge badge-status">Detection</span>
+        </div>
+      </div>
+      <button class="export-btn" onclick="exportReport()">↓ Export Report</button>
+    </div>
+
+    <div class="phase-tabs" id="phaseTabs">
+      
+        <div class="phase-tab active ">
+          
+          Detection
+        </div>
+        <div class="phase-tab  ">
+          
+          Containment
+        </div>
+        <div class="phase-tab  done">
+          <div class="tab-check">✓</div>
+          Eradication
+        </div>
+        <div class="phase-tab  ">
+          
+          Recovery
+        </div>
+        <div class="phase-tab  ">
+          
+          Post-Incident
+        </div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:0.5rem;padding-right:0.5rem;">
+        
+        <button class="next-phase-btn" onclick="nextPhase()">Next: Containment →</button>
+      </div>
+    </div>
+
+    <div class="chat-area" id="chatArea">
+    <div class="msg">
+      <div class="msg-role">
+        <div class="msg-role-icon icon-ai">AI</div>
+        CyberGuard AI · 21m ago
+      </div>
+      <div class="msg-bubble "><h3>INCIDENT RESPONSE - DETECTION &amp; ANALYSIS PHASE</h3><br><h3>Incident: Suspected Ransomware (CRITICAL)</h3><p></p><p>---</p><p></p><h3>1. INITIAL TRIAGE ASSESSMENT &amp; SEVERITY VALIDATION</h3><p></p><p></p><h3>Severity Confirmation: <strong>CRITICAL - VALIDATED</strong></h3><br><ul><li><strong>Active ransomware deployment</strong> with visible ransom note</li><br><li><strong>Business-critical asset</strong> (File Server) compromised</li><br><li><strong>Data availability impact</strong> - encryption in progress or completed</li><br><li><strong>Potential lateral movement risk</strong> to other systems</li><br></ul><br><h3>Immediate Status Classification</h3><br><ul><li><strong>Incident Type</strong>: Confirmed Ransomware Attack</li><br><li><strong>Attack Phase</strong>: Post-Encryption (ransom note visible)</li><br><li><strong>Containment Priority</strong>: IMMEDIATE</li><br><li><strong>Business Impact</strong>: HIGH (data unavailable, potential spread)</li><br></ul><br>---<p></p><p></p><h3>2. KEY INDICATORS OF COMPROMISE (IOCs) - IMMEDIATE COLLECTION</h3><p></p><p></p><h3>Priority 1: File System Indicators (Next 5 minutes)</h3><br><ul><li><strong>Encrypted file extensions</strong> (e.g., .locked, .encrypted, .crypt, random extensions)</li><br><li><strong>Ransom note filenames</strong> (README.txt, HOW_TO_DECRYPT.html, RECOVER_FILES.txt)</li><br><li><strong>Mass file modifications</strong> - Check last modified timestamps for bulk changes</li><br><li><strong>New executables</strong> in temp directories (%TEMP%, \Windows\Temp, C:\ProgramData)</li><br><li><strong>Deleted shadow copies</strong> (vssadmin list shadows)</li><br></ul><br><h3>Priority 2: Network Indicators</h3><br><ul><li><strong>Command &amp; Control (C2) connections</strong>:</li><br></ul>  - Suspicious outbound connections on ports: 443, 8080, 4444, non-standard ports<br>  - TOR network connections (.onion domains, known TOR exit nodes)<br>  - Cryptocurrency wallet API connections<br><ul><li><strong>Lateral movement</strong>: SMB (445), RDP (3389), WinRM (5985/5986) connections</li><br><li><strong>Data exfiltration</strong>: Large outbound data transfers (check NetFlow/firewall logs)</li><br></ul><br><h3>Priority 3: Execution Indicators</h3><br><ul><li><strong>Suspicious processes</strong>:</li><br></ul>  - PowerShell with encoded commands (-enc, -EncodedCommand)<br>  - wscript.exe, cscript.exe executing from unusual locations<br>  - Recently created executable processes<br>  - PsExec, WMI command line execution<br><ul><li><strong>Scheduled tasks</strong> or new services created within last 72 hours</li><br><li><strong>Registry modifications</strong>: Run keys, service entries</li><br></ul><br><h3>Priority 4: Authentication Indicators</h3><br><ul><li><strong>Failed/successful login attempts</strong> - especially Administrator/service accounts</li><br><li><strong>Account creation</strong> or privilege escalation (last 72 hours)</li><br><li><strong>RDP brute force attempts</strong> or suspicious successful authentications</li><br><li><strong>VPN or remote access logs</strong> for unauthorized access</li><br></ul><br>---<p></p><p></p><h3>3. CRITICAL LOG SOURCES - CHECK IMMEDIATELY</h3><p></p><p></p><h3>Tier 1: File Server Logs (0-10 minutes)</h3><br>``<code><br>Priority Order:<br><ul><li>Windows Security Event Log (Security.evtx)</li><br></ul>   - Event IDs: 4624, 4625 (logon/failed), 4672 (special privileges), 4688 (process creation)<br>   <br><ul><li>Windows System Event Log (System.evtx)</li><br></ul>   - Event IDs: 7045 (service installation), 7036 (service state change)<br>   <br><ul><li>PowerShell Logs</li><br></ul>   - Microsoft-Windows-PowerShell/Operational<br>   - Event IDs: 4103, 4104 (script block logging)<br>   <br><ul><li>File System Audit Logs</li><br></ul>   - Event ID: 4663 (object access attempts), 4660 (object deletion)<br>   <br><ul><li>Shadow Copy Service Logs</li><br></ul>   - Look for deletion events (vssadmin delete shadows)<br></code>`<code><p></p><p></p><h3>Tier 2: Network Security Logs (10-15 minutes)</h3><br></code>`<code><br>Priority Order:<br><ul><li>Firewall logs - last 72 hours</li><br></ul>   - Outbound connections from file server<br>   - Unusual port usage or destination IPs<br>   <br><ul><li>IDS/IPS alerts</li><br></ul>   - Ransomware signatures, malware callbacks<br>   <br><ul><li>DNS query logs</li><br></ul>   - C2 domain lookups, DGA patterns, TOR-related queries<br>   <br><ul><li>Proxy/Web gateway logs</li><br></ul>   - File downloads, suspicious URLs accessed from file server<br>   <br><ul><li>NetFlow/network traffic analysis</li><br></ul>   - Bandwidth spikes, unusual internal scanning<br></code>`<code><p></p><p></p><h3>Tier 3: Endpoint Detection &amp; Backup Logs</h3><br></code>`<code><br><ul><li>EDR/Antivirus logs - file server and connected systems</li><br><li>Backup system logs - verify last successful backup, check for backup deletion</li><br><li>SIEM correlation - cross-reference with other alerts</li><br></ul></code>``<p></p><p>---</p><p></p><h3>4. IMMEDIATE QUESTIONS - FIRST 15 MINUTES</h3><p></p><p></p><h3>Critical Operational Questions</h3><br><ul><li><strong>When was the ransom note first observed?</strong> (Exact timestamp)</li><br><li><strong>Is encryption still actively occurring?</strong> (Check CPU usage, disk I/O, file modification times)</li><br><li><strong>What is the last known-good backup timestamp?</strong> Are backups accessible and unencrypted?</li><br><li><strong>How many systems are affected?</strong> (Just file server or lateral spread?)</li><br><li><strong>Is the file server still connected to the network?</strong> (Isolation status)</li><br></ul><br><h3>Technical Investigation Questions</h3><br><ul><li><strong>What user account is currently logged in or was last active on the file server?</strong></li><br><li><strong>Are there any active suspicious processes running?</strong> (Check Task Manager/Process Explorer)</li><br><li><strong>Have Volume Shadow Copies been deleted?</strong> (vssadmin list shadows)</li><br><li><strong>What is the external IP connectivity?</strong> (netstat -ano for active connections)</li><br><li><strong>Are domain controllers or backup systems communicating with the file server?</strong></li><br></ul><br><h3>Scope Assessment Questions</h3><br><ul><li><strong>What data/shares are hosted on this file server?</strong> (Classification: PII, financial, PHI?)</li><br><li><strong>How many users/systems have mapped drives to this server?</strong></li><br><li><strong>Are there any recent security alerts or AV detections on this server?</strong> (past 7 days)</li><br><li><strong>Has anyone received phishing emails recently?</strong> (potential initial access vector)</li><br><li><strong>Were any legitimate user credentials used?</strong> (vs. exploitation)</li><br></ul><br>---<p></p><p></p><h3>5. IMMEDIATE NOTIFICATION REQUIREMENTS</h3><p></p><p></p><h3>Notify Within 5 Minutes (CRITICAL PATH)</h3><br><ul><li><strong>Chief Information Security Officer (CISO)</strong></li><br></ul>   - Critical severity incident declaration<br>   <br><ul><li><strong>IT Security Operations Manager</strong></li><br></ul>   -</div>
+    </div>
+  
+    <div class="msg">
+      <div class="msg-role">
+        <div class="msg-role-icon icon-ai">AI</div>
+        CyberGuard AI · just now
+      </div>
+      <div class="msg-bubble "><strong>Connection error:</strong> Failed to fetch. Check your API key and network.</div>
+    </div>
+  
+    <div class="msg">
+      <div class="msg-role">
+        <div class="msg-role-icon icon-ai">AI</div>
+        CyberGuard AI · just now
+      </div>
+      <div class="msg-bubble "><strong>Connection error:</strong> Failed to fetch. Check your API key and network.</div>
+    </div>
+  </div>
+
+    <div class="quick-actions" id="quickActions">
+      <button class="quick-btn" onclick="sendQuick(&#39;What logs should I pull?&#39;)">What logs should I pull?</button><button class="quick-btn" onclick="sendQuick(&#39;Draft stakeholder alert&#39;)">Draft stakeholder alert</button><button class="quick-btn" onclick="sendQuick(&#39;Check IoC against MITRE ATT&amp;CK&#39;)">Check IoC against MITRE ATT&amp;CK</button><button class="quick-btn" onclick="sendQuick(&#39;What is my legal obligation to report?&#39;)">What is my legal obligation to report?</button>
+    </div>
+
+    <div class="input-area">
+      <textarea class="chat-input" id="chatInput" placeholder="Ask anything about this incident..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path></svg>
+      </button>
+    </div>
+  </div>
+  </main>
+</div>
+
+<!-- API KEY MODAL -->
+<div class="modal-overlay" id="apiModal">
+  <div class="modal" style="width:500px;">
+
+    <!-- Step indicator -->
+    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.5rem;">
+      <div id="step1ind" style="width:24px;height:24px;border-radius:50%;background:var(--amber);color:#fff;font-size:0.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);">1</div>
+      <div style="flex:1;height:1px;background:var(--border);"></div>
+      <div id="step2ind" style="width:24px;height:24px;border-radius:50%;background:var(--bg4);border:1px solid var(--border2);color:var(--text3);font-size:0.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);">2</div>
+      <div style="flex:1;height:1px;background:var(--border);"></div>
+      <div id="step3ind" style="width:24px;height:24px;border-radius:50%;background:var(--bg4);border:1px solid var(--border2);color:var(--text3);font-size:0.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);">3</div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div id="onboard-step1">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+        <div style="width:36px;height:36px;background:var(--amber);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        </div>
+        <div>
+          <h2 style="font-family:var(--font-display);font-weight:800;font-size:1.1rem;margin-bottom:2px;">Welcome to CyberGuard IR</h2>
+          <p style="font-size:0.7rem;color:var(--text3);margin:0;">AI-powered Incident Response Assistant</p>
+        </div>
+      </div>
+
+      <p style="font-size:0.78rem;color:var(--text2);line-height:1.7;margin-bottom:1.25rem;">
+        CyberGuard IR uses the <strong style="color:var(--text);">Anthropic Claude API</strong> to provide expert-level incident response guidance. You'll need a free API key to get started — it takes about 2 minutes to set up.
+      </p>
+
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:1rem;margin-bottom:1.25rem;">
+        <div style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:0.75rem;font-family:var(--font-display);font-weight:600;">Why do I need this?</div>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;">
+          <div style="display:flex;gap:0.6rem;align-items:flex-start;font-size:0.75rem;color:var(--text2);">
+            <span style="color:var(--green);margin-top:1px;">✓</span>
+            <span>Your key is saved only in <strong style="color:var(--text);">your browser</strong> — never on any server</span>
+          </div>
+          <div style="display:flex;gap:0.6rem;align-items:flex-start;font-size:0.75rem;color:var(--text2);">
+            <span style="color:var(--green);margin-top:1px;">✓</span>
+            <span>API calls go <strong style="color:var(--text);">directly to Anthropic</strong> — no middleman</span>
+          </div>
+          <div style="display:flex;gap:0.6rem;align-items:flex-start;font-size:0.75rem;color:var(--text2);">
+            <span style="color:var(--green);margin-top:1px;">✓</span>
+            <span>New accounts get <strong style="color:var(--text);">free credits</strong> to start with</span>
+          </div>
+          <div style="display:flex;gap:0.6rem;align-items:flex-start;font-size:0.75rem;color:var(--text2);">
+            <span style="color:var(--green);margin-top:1px;">✓</span>
+            <span>Typical IR session costs <strong style="color:var(--text);">cents</strong>, not dollars</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:0.75rem;justify-content:space-between;align-items:center;">
+        <button class="modal-cancel" onclick="closeApiModal()">Skip for now</button>
+        <div style="display:flex;gap:0.75rem;">
+          <button class="modal-save" onclick="window.open(&#39;https://console.anthropic.com/settings/keys&#39;,&#39;_blank&#39;)" style="background:var(--bg4);border:1px solid var(--border2);color:var(--text2);">
+            Get API Key ↗
+          </button>
+          <button class="modal-save" onclick="goStep(2)">I have a key →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="onboard-step2" style="display:none;">
+      <h2 style="font-family:var(--font-display);font-weight:800;font-size:1rem;margin-bottom:0.5rem;">Enter your API key</h2>
+      <p style="font-size:0.75rem;color:var(--text2);margin-bottom:1rem;line-height:1.6;">
+        Find your key at <span style="color:var(--amber);cursor:pointer;" onclick="window.open(&#39;https://console.anthropic.com/settings/keys&#39;,&#39;_blank&#39;)">console.anthropic.com → API Keys</span>. It starts with <code style="background:var(--bg4);border:1px solid var(--border);padding:1px 6px;border-radius:3px;font-size:0.75rem;color:var(--cyan);">sk-ant-</code>
+      </p>
+
+      <div style="position:relative;margin-bottom:0.75rem;">
+        <input class="modal-input" id="apiKeyInput" type="password" placeholder="sk-ant-api03-..." style="padding-right:44px;">
+        <button onclick="toggleKeyVis()" id="eyeBtn" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text3);cursor:pointer;padding:4px;font-size:0.75rem;">SHOW</button>
+      </div>
+
+      <div id="keyError" style="display:none;font-size:0.72rem;color:var(--red2);margin-bottom:0.75rem;padding:0.5rem 0.75rem;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:4px;"></div>
+
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:0.75rem;margin-bottom:1rem;">
+        <div style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:0.5rem;font-family:var(--font-display);font-weight:600;">How to get your key</div>
+        <ol style="padding-left:1.1rem;font-size:0.73rem;color:var(--text2);line-height:2;">
+          <li>Go to <span style="color:var(--amber);cursor:pointer;" onclick="window.open(&#39;https://console.anthropic.com&#39;,&#39;_blank&#39;)">console.anthropic.com</span> and sign up (free)</li>
+          <li>Click <strong style="color:var(--text);">API Keys</strong> in the left sidebar</li>
+          <li>Click <strong style="color:var(--text);">Create Key</strong> and copy it</li>
+          <li>Paste it above and click Save</li>
+        </ol>
+      </div>
+
+      <div style="display:flex;gap:0.75rem;justify-content:space-between;">
+        <button class="modal-cancel" onclick="goStep(1)">← Back</button>
+        <button class="modal-save" onclick="validateAndSave()">Save &amp; Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="onboard-step3" style="display:none;text-align:center;">
+      <div style="width:56px;height:56px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><path d="M20 6L9 17l-5-5"></path></svg>
+      </div>
+      <h2 style="font-family:var(--font-display);font-weight:800;font-size:1.1rem;margin-bottom:0.5rem;color:var(--green2);">You're all set!</h2>
+      <p style="font-size:0.78rem;color:var(--text2);line-height:1.7;margin-bottom:1.5rem;">
+        Your API key is saved. CyberGuard IR is ready to assist with incident response. Open a new incident from the left panel to get started.
+      </p>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:0.75rem 1rem;margin-bottom:1.5rem;text-align:left;">
+        <div style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:0.5rem;font-family:var(--font-display);font-weight:600;">Quick tips</div>
+        <div style="font-size:0.73rem;color:var(--text2);line-height:2;">
+          • Fill in the <strong style="color:var(--text);">New Incident</strong> form on the left to begin<br>
+          • AI guidance auto-loads for each IR phase<br>
+          • Use <strong style="color:var(--text);">Quick Actions</strong> buttons for common tasks<br>
+          • Export your incident log anytime as a report
+        </div>
+      </div>
+      <button class="modal-save" style="width:100%;padding:12px;" onclick="closeApiModal()">Start Responding →</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ─── STATE ─────────────────────────────────────────────────────────────────
+let apiKey = localStorage.getItem('sentinel_api_key') || '';
+let incidents = JSON.parse(localStorage.getItem('sentinel_incidents') || '[]');
+let currentIncidentId = null;
+let selectedSev = '';
+
+const PHASES = ['Detection', 'Containment', 'Eradication', 'Recovery', 'Post-Incident'];
+
+const PHASE_PROMPTS = {
+  Detection: (inc) => `You are a senior incident responder (CISSP-level) assisting with a security incident. 
+Incident: "${inc.title}"
+Type: ${inc.type}
+Severity: ${inc.severity}
+Scope: ${inc.scope}
+Description: ${inc.description}
+
+We are in the DETECTION & ANALYSIS phase. Provide:
+1. Initial triage assessment and severity validation
+2. Key indicators of compromise (IoCs) to look for immediately
+3. Critical log sources to check right now
+4. Immediate questions to answer in the first 15 minutes
+5. Who to notify immediately (roles, not names)
+
+Be specific, technical, and prioritized. Use clear headings.`,
+
+  Containment: (inc) => `Continuing incident response for "${inc.title}" (${inc.type}, ${inc.severity} severity).
+We have moved to the CONTAINMENT phase.
+
+Provide a detailed containment checklist including:
+1. Short-term containment steps (immediate, within 1 hour)
+2. Long-term containment measures (1-24 hours)
+3. Evidence preservation steps (do NOT destroy forensic data)
+4. Network isolation procedures
+5. Account lockdown recommendations
+6. Business continuity considerations during containment
+
+Be specific and ordered by priority.`,
+
+  Eradication: (inc) => `Continuing IR for "${inc.title}" (${inc.type}).
+We are now in the ERADICATION phase — the threat has been contained.
+
+Provide:
+1. Root cause analysis checklist
+2. Malware/artifact removal steps
+3. Vulnerability patching priorities
+4. Credential reset requirements
+5. How to verify eradication is complete
+6. Common mistakes to avoid in this phase
+
+Be thorough — missed eradication is the #1 cause of re-infection.`,
+
+  Recovery: (inc) => `Continuing IR for "${inc.title}".
+RECOVERY phase — eradication confirmed, now restoring operations.
+
+Provide:
+1. System restoration sequence and priorities
+2. Validation tests before returning to production
+3. Enhanced monitoring to deploy during recovery
+4. Communication plan (internal stakeholders, customers if applicable)
+5. Legal/compliance notifications that may be required (GDPR, HIPAA, etc.)
+6. Estimated timeline framework for recovery milestones`,
+
+  'Post-Incident': (inc) => `Final phase for incident "${inc.title}" (${inc.type}, ${inc.severity}).
+POST-INCIDENT REVIEW & LESSONS LEARNED.
+
+Generate a structured post-incident report outline including:
+1. Executive summary (non-technical, 3-4 sentences)
+2. Timeline of events (discovery to resolution)
+3. Root cause summary
+4. What worked well
+5. What failed / gaps identified
+6. Specific remediation actions with owners and deadlines
+7. Metrics: MTTD, MTTR estimates
+8. Recommended security improvements
+
+This should be suitable for a CISO/board briefing.`
+};
+
+const QUICK_ACTIONS = {
+  Detection: ['What logs should I pull?', 'Draft stakeholder alert', 'Check IoC against MITRE ATT&CK', 'What is my legal obligation to report?'],
+  Containment: ['Draft isolation runbook', 'Evidence preservation checklist', 'Who approves containment actions?', 'Containment vs business impact tradeoffs'],
+  Eradication: ['Generate removal verification checklist', 'How to confirm no persistence?', 'Patch prioritization framework', 'Forensic image requirements'],
+  Recovery: ['Recovery validation checklist', 'Draft customer notification', 'Enhanced monitoring recommendations', 'Return-to-production criteria'],
+  'Post-Incident': ['Generate PIR report', 'MTTD/MTTR calculation', 'Control gap analysis', 'Board-level summary']
+};
+
+// ─── API KEY / ONBOARDING ───────────────────────────────────────────────────
+function openApiModal() {
+  const input = document.getElementById('apiKeyInput');
+  if (input) input.value = apiKey;
+  goStep(apiKey ? 2 : 1);
+  document.getElementById('apiModal').classList.add('open');
+}
+function closeApiModal() { document.getElementById('apiModal').classList.remove('open'); }
+function goStep(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('onboard-step' + i).style.display = i === n ? 'block' : 'none';
+    const ind = document.getElementById('step' + i + 'ind');
+    if (i < n) { ind.style.background='var(--green)';ind.style.color='#000';ind.style.border='none';ind.textContent='✓'; }
+    else if (i === n) { ind.style.background='var(--amber)';ind.style.color='#fff';ind.style.border='none';ind.textContent=i; }
+    else { ind.style.background='var(--bg4)';ind.style.color='var(--text3)';ind.style.border='1px solid var(--border2)';ind.textContent=i; }
+  });
+}
+function toggleKeyVis() {
+  const input = document.getElementById('apiKeyInput');
+  const btn = document.getElementById('eyeBtn');
+  if (input.type === 'password') { input.type = 'text'; btn.textContent = 'HIDE'; }
+  else { input.type = 'password'; btn.textContent = 'SHOW'; }
+}
+function validateAndSave() {
+  const val = document.getElementById('apiKeyInput').value.trim();
+  const err = document.getElementById('keyError');
+  if (!val) { err.style.display='block'; err.textContent='Please enter your API key.'; return; }
+  if (!val.startsWith('sk-ant-') && !val.startsWith('sk-')) { err.style.display='block'; err.textContent="That doesn't look like an Anthropic key. It should start with sk-ant-"; return; }
+  err.style.display = 'none';
+  apiKey = val;
+  localStorage.setItem('sentinel_api_key', apiKey);
+  goStep(3);
+}
+function saveApiKey() { validateAndSave(); }
+
+// ─── SEVERITY ───────────────────────────────────────────────────────────────
+function selectSev(btn) {
+  document.querySelectorAll('.severity-btn').forEach(b => b.className = 'severity-btn');
+  selectedSev = btn.dataset.sev;
+  btn.classList.add('active-' + selectedSev.toLowerCase());
+}
+
+// ─── INCIDENT MANAGEMENT ────────────────────────────────────────────────────
+function saveIncidents() { localStorage.setItem('sentinel_incidents', JSON.stringify(incidents)); }
+
+function startIncident() {
+  const title = document.getElementById('incTitle').value.trim();
+  const type = document.getElementById('incType').value;
+  const scope = document.getElementById('incScope').value.trim();
+  const description = document.getElementById('incDesc').value.trim();
+
+  if (!title || !type || !selectedSev) {
+    alert('Please fill in title, type, and severity.');
+    return;
+  }
+
+  if (!apiKey) { openApiModal(); return; }
+
+  const inc = {
+    id: Date.now().toString(),
+    title, type, severity: selectedSev, scope, description,
+    createdAt: new Date().toISOString(),
+    phase: 'Detection',
+    completedPhases: [],
+    phaseMessages: {'Detection':[],'Containment':[],'Eradication':[],'Recovery':[],'Post-Incident':[]}
+  };
+
+  incidents.unshift(inc);
+  saveIncidents();
+  renderIncidentList();
+  loadIncident(inc.id);
+
+  // Clear form
+  document.getElementById('incTitle').value = '';
+  document.getElementById('incType').value = '';
+  document.getElementById('incScope').value = '';
+  document.getElementById('incDesc').value = '';
+  document.querySelectorAll('.severity-btn').forEach(b => b.className = 'severity-btn');
+  selectedSev = '';
+
+  // Auto-trigger first phase
+  triggerPhaseGuidance(inc.id, 'Detection');
+}
+
+function getIncident(id) { return incidents.find(i => i.id === id); }
+
+function loadIncident(id) {
+  currentIncidentId = id;
+  incidents.forEach(i => i._active = i.id === id);
+  renderIncidentList();
+  renderIncidentView();
+}
+
+// ─── RENDERING ──────────────────────────────────────────────────────────────
+function renderIncidentList() {
+  const list = document.getElementById('incidentList');
+  if (!incidents.length) {
+    list.innerHTML = '<div style="font-size:0.7rem;color:var(--text3);padding:0.5rem 0;">No incidents yet</div>';
+    return;
+  }
+  list.innerHTML = incidents.map(inc => {
+    const sevColors = { Critical: '#ef4444', High: '#f59e0b', Medium: '#3b82f6', Low: '#22c55e' };
+    return `<div class="incident-item ${inc.id === currentIncidentId ? 'active' : ''}" onclick="loadIncident('${inc.id}')">
+      <div class="incident-sev-dot" style="background:${sevColors[inc.severity] || '#64748b'}"></div>
+      <div class="incident-info">
+        <div class="incident-title">${inc.title}</div>
+        <div class="incident-meta">${inc.type} · ${inc.phase} · ${timeAgo(inc.createdAt)}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderIncidentView() {
+  const inc = getIncident(currentIncidentId);
+  document.getElementById('emptyState').style.display = inc ? 'none' : 'flex';
+  document.getElementById('incidentView').style.display = inc ? 'flex' : 'none';
+
+  if (!inc) return;
+
+  const view = document.getElementById('incidentView');
+  const sevBadge = `badge-${inc.severity.toLowerCase()}`;
+
+  view.innerHTML = `
+    <div class="incident-header">
+      <div class="incident-header-left">
+        <div class="incident-title-main">${inc.title}</div>
+        <div class="incident-badges">
+          <span class="badge ${sevBadge}">${inc.severity}</span>
+          <span class="badge badge-type">${inc.type}</span>
+          <span class="badge badge-status">${inc.phase}</span>
+        </div>
+      </div>
+      <button class="export-btn" onclick="exportReport()">↓ Export Report</button>
+    </div>
+
+    <div class="phase-tabs" id="phaseTabs">
+      ${PHASES.map((p, i) => `
+        <div class="phase-tab ${p === inc.phase ? 'active' : ''} ${inc.completedPhases.includes(p) ? 'done' : ''}">
+          ${inc.completedPhases.includes(p) ? '<div class="tab-check">✓</div>' : ''}
+          ${p}
+        </div>`).join('')}
+      <div style="margin-left:auto;display:flex;align-items:center;gap:0.5rem;padding-right:0.5rem;">
+        ${PHASES.indexOf(inc.phase) > 0 ? 
+          `<button class="prev-phase-btn" onclick="prevPhase()">← ${PHASES[PHASES.indexOf(inc.phase)-1]}</button>` : ''}
+        ${PHASES.indexOf(inc.phase) < PHASES.length - 1 ? 
+          `<button class="next-phase-btn" onclick="nextPhase()">Next: ${PHASES[PHASES.indexOf(inc.phase)+1]} →</button>` : 
+          `<span style="font-size:0.7rem;color:var(--green2);padding:0 1rem;">✓ All phases complete</span>`}
+      </div>
+    </div>
+
+    <div class="chat-area" id="chatArea">
+      ${renderMessages(inc.phaseMessages[inc.phase] || [])}
+    </div>
+
+    <div class="quick-actions" id="quickActions">
+      ${(QUICK_ACTIONS[inc.phase] || []).map(q =>
+        `<button class="quick-btn" onclick="sendQuick('${q.replace(/'/g, "\\'")}')">${q}</button>`
+      ).join('')}
+    </div>
+
+    <div class="input-area">
+      <textarea class="chat-input" id="chatInput" placeholder="Ask anything about this incident..." rows="1"
+        onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+      </button>
+    </div>
+  `;
+
+  scrollChatBottom();
+}
+
+function renderMessages(messages) {
+  if (!messages.length) return '<div style="color:var(--text3);font-size:0.75rem;text-align:center;padding:2rem;">Loading guidance...</div>';
+  return messages.map(m => `
+    <div class="msg">
+      <div class="msg-role">
+        <div class="msg-role-icon ${m.role === 'assistant' ? 'icon-ai' : 'icon-user'}">${m.role === 'assistant' ? 'AI' : 'ME'}</div>
+        ${m.role === 'assistant' ? 'CyberGuard AI' : 'YOU'} · ${timeAgo(m.ts)}
+      </div>
+      <div class="msg-bubble ${m.role === 'user' ? 'user-bubble' : ''}">${formatMessage(m.content)}</div>
+    </div>
+  `).join('');
+}
+
+function formatMessage(text) {
+  return text
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^# (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+    .replace(/^[-*] (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/g, m => `<ul>${m}</ul>`)
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n/g, '<br>');
+}
+
+// ─── PHASE LOGIC ────────────────────────────────────────────────────────────
+async function triggerPhaseGuidance(incId, phase) {
+  const inc = getIncident(incId);
+  if (!inc) return;
+
+  const prompt = PHASE_PROMPTS[phase] ? PHASE_PROMPTS[phase](inc) : `Provide guidance for the ${phase} phase of incident "${inc.title}".`;
+  const systemPrompt = `You are a CyberGuard senior cybersecurity incident responder (CISSP, CISM). You are assisting with a ${inc.type} incident (${inc.severity} severity) titled "${inc.title}". Current phase: ${phase}. Be technical, precise, and actionable. Use clear headings and lists.`;
+  await callAI(incId, null, true, systemPrompt, [{ role: 'user', content: prompt }]);
+}
+
+function nextPhase() {
+  const inc = getIncident(currentIncidentId);
+  if (!inc) return;
+
+  const idx = PHASES.indexOf(inc.phase);
+  if (idx >= PHASES.length - 1) return;
+
+  // Mark current phase done
+  if (!inc.completedPhases.includes(inc.phase)) {
+    inc.completedPhases.push(inc.phase);
+  }
+
+  const nextP = PHASES[idx + 1];
+  inc.phase = nextP;
+  saveIncidents();
+  renderIncidentView();
+  triggerPhaseGuidance(currentIncidentId, nextP);
+}
+
+function prevPhase() {
+  const inc = getIncident(currentIncidentId);
+  if (!inc) return;
+  const idx = PHASES.indexOf(inc.phase);
+  if (idx <= 0) return;
+  inc.phase = PHASES[idx - 1];
+  // Remove from completedPhases if going back
+  inc.completedPhases = inc.completedPhases.filter(p => p !== inc.phase);
+  saveIncidents();
+  renderIncidentView();
+}
+
+function switchPhase(phase) {
+  nextPhase();
+}
+
+// ─── MESSAGING ──────────────────────────────────────────────────────────────
+function sendQuick(text) {
+  document.getElementById('chatInput').value = text;
+  sendMessage();
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text || !currentIncidentId) return;
+  if (!apiKey) { openApiModal(); return; }
+
+  input.value = '';
+  input.style.height = 'auto';
+
+  const inc = getIncident(currentIncidentId);
+  if (!inc.phaseMessages[inc.phase]) inc.phaseMessages[inc.phase] = [];
+  inc.phaseMessages[inc.phase].push({ role: 'user', content: text, ts: new Date().toISOString() });
+  saveIncidents();
+  renderChatArea();
+
+  const systemPrompt = `You are a CyberGuard senior cybersecurity incident responder with CISSP, CISM certifications. 
+You are assisting with a ${inc.type} incident (${inc.severity} severity) titled "${inc.title}".
+Current phase: ${inc.phase}.
+Be technical, precise, and actionable. Use clear structure with headings and lists where appropriate.`;
+
+  const apiMessages = (inc.phaseMessages[inc.phase] || []).slice(-10).map(m => ({ role: m.role, content: m.content }));
+  await callAI(currentIncidentId, null, false, systemPrompt, apiMessages);
+}
+
+async function callAI(incId, userPrompt, isSystem = false, systemOverride = null, messageOverride = null) {
+  const inc = getIncident(incId);
+  if (!inc) return;
+
+  const sendBtn = document.getElementById('sendBtn');
+  if (sendBtn) sendBtn.disabled = true;
+
+  // Show typing indicator
+  const chatArea = document.getElementById('chatArea');
+  if (chatArea) {
+    const typingEl = document.createElement('div');
+    typingEl.id = 'typing';
+    typingEl.className = 'msg';
+    typingEl.innerHTML = `
+      <div class="msg-role"><div class="msg-role-icon icon-ai">AI</div> CyberGuard AI</div>
+      <div class="msg-bubble">
+        <div class="typing-indicator">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      </div>`;
+    chatArea.appendChild(typingEl);
+    scrollChatBottom();
+  }
+
+  try {
+    const system = systemOverride || `You are a CyberGuard senior cybersecurity incident responder (CISSP, CISM). Provide expert, actionable incident response guidance. Be technical and structured.`;
+
+    const messages = messageOverride || [{ role: 'user', content: userPrompt }];
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5',
+        max_tokens: 1500,
+        system,
+        messages
+      })
+    });
+
+    const data = await response.json();
+
+    // Remove typing
+    const typing = document.getElementById('typing');
+    if (typing) typing.remove();
+
+    if (data.content && data.content[0]) {
+      const reply = data.content[0].text;
+      if (!inc.phaseMessages[inc.phase]) inc.phaseMessages[inc.phase] = [];
+      inc.phaseMessages[inc.phase].push({ role: 'assistant', content: reply, ts: new Date().toISOString() });
+      saveIncidents();
+      renderChatArea();
+    } else if (data.error) {
+      if (!inc.phaseMessages[inc.phase]) inc.phaseMessages[inc.phase] = [];
+      inc.phaseMessages[inc.phase].push({ role: 'assistant', content: `**Error:** ${data.error.message}`, ts: new Date().toISOString() });
+      saveIncidents();
+      renderChatArea();
+    }
+  } catch (err) {
+    const typing = document.getElementById('typing');
+    if (typing) typing.remove();
+    if (!inc.phaseMessages[inc.phase]) inc.phaseMessages[inc.phase] = [];
+    inc.phaseMessages[inc.phase].push({ role: 'assistant', content: `**Connection error:** ${err.message}. Check your API key and network.`, ts: new Date().toISOString() });
+    saveIncidents();
+    renderChatArea();
+  } finally {
+    const sendBtn = document.getElementById('sendBtn');
+    if (sendBtn) sendBtn.disabled = false;
+  }
+}
+
+function renderChatArea() {
+  const inc = getIncident(currentIncidentId);
+  if (!inc) return;
+  const chatArea = document.getElementById('chatArea');
+  if (!chatArea) return;
+  chatArea.innerHTML = renderMessages(inc.phaseMessages[inc.phase] || []);
+  scrollChatBottom();
+  renderIncidentList();
+}
+
+function scrollChatBottom() {
+  const chatArea = document.getElementById('chatArea');
+  if (chatArea) chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+// ─── EXPORT ─────────────────────────────────────────────────────────────────
+function exportReport() {
+  const inc = getIncident(currentIncidentId);
+  if (!inc) return;
+
+  let text = `CyberGuard INCIDENT REPORT\n${'='.repeat(60)}\n\n`;
+  text += `Title: ${inc.title}\nType: ${inc.type}\nSeverity: ${inc.severity}\nOpened: ${new Date(inc.createdAt).toLocaleString()}\nCurrent Phase: ${inc.phase}\n\n`;
+  text += `Scope:\n${inc.scope}\n\nInitial Description:\n${inc.description}\n\n`;
+  text += `${'='.repeat(60)}\nINCIDENT LOG\n${'='.repeat(60)}\n\n`;
+
+  const allMessages = Object.entries(inc.phaseMessages || {}).flatMap(([phase, msgs]) => msgs.map(m => ({...m, phase})));
+  allMessages.forEach(m => {
+    const role = m.role === 'assistant' ? 'CyberGuard AI' : 'ANALYST';
+    const time = new Date(m.ts).toLocaleString();
+    text += `[${time}] ${role}\n${m.content.replace(/<[^>]+>/g, '')}\n\n${'─'.repeat(40)}\n\n`;
+  });
+
+  const blob = new Blob([text], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `IR-Report-${inc.title.replace(/[^a-z0-9]/gi, '_')}-${Date.now()}.txt`;
+  a.click();
+}
+
+// ─── UTILS ──────────────────────────────────────────────────────────────────
+function timeAgo(iso) {
+  const diff = (Date.now() - new Date(iso)) / 1000;
+  if (diff < 60) return 'just now';
+  if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+  if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+  return Math.floor(diff / 86400) + 'd ago';
+}
+
+// ─── INIT ───────────────────────────────────────────────────────────────────
+renderIncidentList();
+if (incidents.length) loadIncident(incidents[0].id);
+if (!apiKey) setTimeout(openApiModal, 800);
+</script>
+
+
+</body></html>
